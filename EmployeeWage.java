@@ -18,11 +18,11 @@ public class EmployeeWage {
     public static void main(String[] agrs) {
         System.out.println("Welcome to employee wage computation problem");
         final int FULL_TIME_DAILY_HOUR = 8;
-        final int PART_TIME_TIME_DAILY_HOUR = 4;
+        final int PART_TIME_DAILY_HOUR = 4;
         if(checkAttendance()) {
             System.out.println("Employee is Present");
             if(isPartTime()) {
-                System.out.println("Daily Wage (Part Time): " + dailyWage(PART_TIME_TIME_DAILY_HOUR));
+                System.out.println("Daily Wage (Part Time): " + dailyWage(PART_TIME_DAILY_HOUR));
             } else {
                 System.out.println("Daily Wage (Full Time): " + dailyWage(FULL_TIME_DAILY_HOUR));
             }
