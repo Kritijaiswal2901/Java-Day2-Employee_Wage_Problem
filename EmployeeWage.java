@@ -37,5 +37,22 @@ public class EmployeeWage {
             System.out.println("Daily Wage (Part Time): " + dailyWage(PART_TIME_DAILY_HOUR));
             System.out.println("Monthly Wage (Part Time): " + monthlyWage(dailyWage(PART_TIME_DAILY_HOUR)));
         }
+
+        int totalHours = 8;
+        int totalDays = 0;
+        int totalWage = 0;
+
+        while(totalDays < 20 && totalHours < 100) {
+            if(isPartTime() == 0) {
+                totalHours += FULL_TIME_DAILY_HOUR;
+                totalWage += dailyWage(FULL_TIME_DAILY_HOUR);
+            } else {
+                totalHours += PART_TIME_DAILY_HOUR;
+                totalWage += dailyWage(PART_TIME_DAILY_HOUR);
+            }
+            totalDays++;
+        }
+
+        System.out.println("Total Wage Until 100 Hours or 20 Days: " + totalWage);
     }
 }
