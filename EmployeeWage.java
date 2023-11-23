@@ -1,58 +1,56 @@
-public class EmployeeWage {
+class EmployeeWageCom {
+   
+    public static final int PART_TIME = 1;
+    public static final int FULL_TIME = 2;
+     public static final int ABSENT = 0;
 
-    private static Boolean checkAttendance() {
-        int empType = (int) (Math.floor(Math.random() * 10) % 2);
-        return empType == 1;
+    static int EmployeeType() {
+        double randomNumber = Math.random();
+        if (randomNumber < 0.2)
+            return ABSENT;
+        else if (randomNumber < 0.66)
+            return PART_TIME;
+        else
+            return FULL_TIME;
+    }
+}
+
+class WageCalculator {
+    private static final int DAILY_WAGE_PER_HOUR = 20;
+    private static final int FULL_TIME_DAILY_HOUR = 8;
+    private static final int PART_TIME_DAILY_HOUR = 4;
+    private static final int NO_OF_DAYS = 20;
+
+    private static int DailyWage(int hours) {
+        return DAILY_WAGE_PER_HOUR * hours;
     }
 
-    private static int dailyWage(int todayDailyHour) {
-        final int DAILY_WAGE_PER_HOUR = 20;
-        return DAILY_WAGE_PER_HOUR * todayDailyHour;
-    }
-
-    private static int isPartTime() {
-        int empType = (int) (Math.floor(Math.random() * 10) % 2);
-        return empType;
-    }
-
-    private static int monthlyWage(int dailyWage) {
-        final int NO_OF_DAYS = 20;
-        return NO_OF_DAYS * dailyWage;
-    }
-
-    public static void main(String[] agrs) {
-        System.out.println("Welcome to employee wage computation problem");
-        final int FULL_TIME_DAILY_HOUR = 8;
-        final int PART_TIME_DAILY_HOUR = 4;
-        if(checkAttendance()) {
-            System.out.println("Employee is Present");
-        } else {
-            System.out.println("Employee is Absent");
-        }
-        
-        if(isPartTime() == 0) {
-            System.out.println("Daily Wage (Full Time): " + dailyWage(FULL_TIME_DAILY_HOUR));
-            System.out.println("Monthly Wage (Full Time): " + monthlyWage(dailyWage(FULL_TIME_DAILY_HOUR)));
-        } else {
-            System.out.println("Daily Wage (Part Time): " + dailyWage(PART_TIME_DAILY_HOUR));
-            System.out.println("Monthly Wage (Part Time): " + monthlyWage(dailyWage(PART_TIME_DAILY_HOUR)));
-        }
-
-        int totalHours = 8;
-        int totalDays = 0;
+     static int TotalWage() {
         int totalWage = 0;
-
-        while(totalDays < 20 && totalHours < 100) {
-            if(isPartTime() == 0) {
-                totalHours += FULL_TIME_DAILY_HOUR;
-                totalWage += dailyWage(FULL_TIME_DAILY_HOUR);
-            } else {
-                totalHours += PART_TIME_DAILY_HOUR;
-                totalWage += dailyWage(PART_TIME_DAILY_HOUR);
+        for (int day = 0; day < NO_OF_DAYS; day++) {
+            int employeeType = EmployeeWageCom.EmployeeType();
+            switch (employeeType) {
+                case EmployeeWageCom.ABSENT:
+                    day++;
+                    break;
+                case EmployeeWageCom.PART_TIME:
+                    day++;
+                    totalWage += DailyWage(PART_TIME_DAILY_HOUR);
+                    break;
+                case EmployeeWageCom.FULL_TIME:
+                    day++;
+                    totalWage += DailyWage(FULL_TIME_DAILY_HOUR);
+                    break;
             }
-            totalDays++;
         }
+        return totalWage;
+    }
+}
 
-        System.out.println("Total Wage Until 100 Hours or 20 Days: " + totalWage);
+public class EmployeeWage {
+    public static void main(String[] args) {
+        System.out.println("Welcome to Employee Wage Computation Program");
+        int totalWage = WageCalculator.TotalWage();
+        System.out.println("Total Wage for the Month: " + totalWage);
     }
 }
