@@ -22,20 +22,24 @@ public class EmployeeWage {
         final int NO_OF_DAYS = 20;
         return NO_OF_DAYS * dailyWage;
     }
-      public static int calculateEmployeeWage(int fullTimeDailyHour, int partTimeDailyHour, int totalHours, int totalDays) {
+    public static int calculateEmployeeWage(int fullTimeDailyHour, int partTimeDailyHour, int totalHours, int totalDays, List<Integer> dailyWages) {
         int totalWage = 0;
         while (totalDays < 20 && totalHours < 100) {
+            int dailyWage = 0;
             if (isPartTime() == 0) {
                 totalHours += fullTimeDailyHour;
-                totalWage += dailyWage(fullTimeDailyHour);
+                dailyWage = dailyWage(fullTimeDailyHour);
             } else {
                 totalHours += partTimeDailyHour;
-                totalWage += dailyWage(partTimeDailyHour);
+                dailyWage = dailyWage(partTimeDailyHour);
             }
             totalDays++;
+            dailyWages.add(dailyWage);
+            totalWage += dailyWage;
         }
         return totalWage;
     }
+
     // UC 8: Compute Employee Wage for multiple companies - Class for each company
 static class CompanyEmpWage {
     private final String companyName;
@@ -44,6 +48,8 @@ static class CompanyEmpWage {
     private final int noOfDays;
     private final int totalHours;
     private int totalWage;
+    private final List<Integer> dailyWages;
+
 
 
     public CompanyEmpWage(String companyName, int fullTimeDailyHour, int partTimeDailyHour, int noOfDays, int totalHours) {
@@ -53,6 +59,8 @@ static class CompanyEmpWage {
         this.noOfDays = noOfDays;
         this.totalHours = totalHours;
         this.totalWage = 0;
+        this.dailyWages = new ArrayList<>();
+
     }
 
     public String getCompanyName() {
@@ -71,6 +79,9 @@ static class CompanyEmpWage {
             }
     public void setTotalWage(int totalWage) {
                 this.totalWage = totalWage;
+            }
+    public List<Integer> getDailyWages() {
+                return dailyWages;
             }
         }
        // Ability to manage Employee Wage of multiple companies
@@ -92,7 +103,8 @@ static class CompanyEmpWage {
                     company.getFullTimeDailyHour(),
                     company.getPartTimeDailyHour(),
                     0,
-                    0
+                    0,
+                    company.getDailyWages()
             );
             company.setTotalWage(totalWage);
         }
@@ -124,7 +136,8 @@ class EmpWageBuilderInterface implements EmpWageInterface {
                     company.getFullTimeDailyHour(),
                     company.getPartTimeDailyHour(),
                     0,
-                    0
+                    0,
+                    company.getDailyWages()
             );
             company.setTotalWage(totalWage);
         }
@@ -132,6 +145,69 @@ class EmpWageBuilderInterface implements EmpWageInterface {
 }
 
    
+// UC 12: Refactor to have list of multiple companies to manage Employee Wage
+class EmpWageBuilderArrayList {
+    private final List<CompanyEmpWage> companies;
+
+    public EmpWageBuilderArrayList() {
+        this.companies = new ArrayList<>();
+    }
+
+    public void addCompany(CompanyEmpWage company) {
+        companies.add(company);
+    }
+
+    public void computeWages() {
+        for (CompanyEmpWage company : companies) {
+            int totalWage = calculateEmployeeWage(
+                    company.getFullTimeDailyHour(),
+                    company.getPartTimeDailyHour(),
+                    0,
+                    0,
+                    company.getDailyWages()
+            );
+            company.setTotalWage(totalWage);
+        }
+    }
+    public List<CompanyEmpWage> getCompanies() {
+        return companies;
+    }
+}
+
+// UC 13: Ability to get the Total Wage when queried by Company
+static class EmpWageBuilderWithQuery {
+    private final List<CompanyEmpWage> companies;
+
+    public EmpWageBuilderWithQuery() {
+        this.companies = new ArrayList<>();
+    }
+
+    public void addCompany(CompanyEmpWage company) {
+        companies.add(company);
+    }
+
+    public void computeWages() {
+        for (CompanyEmpWage company : companies) {
+            int totalWage = calculateEmployeeWage(
+                    company.getFullTimeDailyHour(),
+                    company.getPartTimeDailyHour(),
+                    0,
+                    0,
+                    company.getDailyWages()
+            );
+            company.setTotalWage(totalWage);
+        }
+    }
+
+    public int getTotalWageByCompany(String companyName) {
+        for (CompanyEmpWage company : companies) {
+            if (company.getCompanyName().equals(companyName)) {
+                return company.getTotalWage();
+            }
+        }
+        return 0; 
+    }
+}
 
     public static void main(String[] agrs) {
         System.out.println("Welcome to employee wage computation problem");
