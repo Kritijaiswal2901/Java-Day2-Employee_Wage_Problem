@@ -98,6 +98,38 @@ static class CompanyEmpWage {
         }
     }
 }
+//using interface
+
+interface EmpWageInterface {
+    void addCompany(CompanyEmpWage company);
+    void computeWages();
+}
+
+class EmpWageBuilderInterface implements EmpWageInterface {
+    private final List<CompanyEmpWage> companies;
+
+    public EmpWageBuilderInterface() {
+        this.companies = new ArrayList<>();
+    }
+
+    @Override
+    public void addCompany(CompanyEmpWage company) {
+        companies.add(company);
+    }
+
+    @Override
+    public void computeWages() {
+        for (CompanyEmpWage company : companies) {
+            int totalWage = calculateEmployeeWage(
+                    company.getFullTimeDailyHour(),
+                    company.getPartTimeDailyHour(),
+                    0,
+                    0
+            );
+            company.setTotalWage(totalWage);
+        }
+    }
+}
 
    
 
@@ -138,3 +170,5 @@ static class CompanyEmpWage {
         }
     }
 }
+
+
