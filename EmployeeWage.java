@@ -22,7 +22,7 @@ public class EmployeeWage {
         final int NO_OF_DAYS = 20;
         return NO_OF_DAYS * dailyWage;
     }
-    private static int calculateEmployeeWage(int fullTimeDailyHour, int partTimeDailyHour, int totalHours, int totalDays) {
+      public static int calculateEmployeeWage(int fullTimeDailyHour, int partTimeDailyHour, int totalHours, int totalDays) {
         int totalWage = 0;
         while (totalDays < 20 && totalHours < 100) {
             if (isPartTime() == 0) {
@@ -36,12 +36,76 @@ public class EmployeeWage {
         }
         return totalWage;
     }
+    // UC 8: Compute Employee Wage for multiple companies - Class for each company
+static class CompanyEmpWage {
+    private final String companyName;
+    private final int fullTimeDailyHour;
+    private final int partTimeDailyHour;
+    private final int noOfDays;
+    private final int totalHours;
+    private int totalWage;
 
+
+    public CompanyEmpWage(String companyName, int fullTimeDailyHour, int partTimeDailyHour, int noOfDays, int totalHours) {
+        this.companyName = companyName;
+        this.fullTimeDailyHour = fullTimeDailyHour;
+        this.partTimeDailyHour = partTimeDailyHour;
+        this.noOfDays = noOfDays;
+        this.totalHours = totalHours;
+        this.totalWage = 0;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public int getFullTimeDailyHour() {
+        return fullTimeDailyHour;
+    }
+
+    public int getPartTimeDailyHour() {
+        return partTimeDailyHour;
+    }
+    public int getTotalWage() {
+                return totalWage;
+            }
+    public void setTotalWage(int totalWage) {
+                this.totalWage = totalWage;
+            }
+        }
+       // Ability to manage Employee Wage of multiple companies
+    static class EmpWageBuilder {
+        //save the total wage for each company
+    private final List<CompanyEmpWage> companies;
+
+    public EmpWageBuilder() {
+        this.companies = new ArrayList<>();
+    }
+
+    public void addCompany(CompanyEmpWage company) {
+        companies.add(company);
+    }
+
+    public void computeWages() {
+        for (CompanyEmpWage company : companies) {
+            int totalWage = calculateEmployeeWage(
+                    company.getFullTimeDailyHour(),
+                    company.getPartTimeDailyHour(),
+                    0,
+                    0
+            );
+            company.setTotalWage(totalWage);
+        }
+    }
+}
+
+   
 
     public static void main(String[] agrs) {
         System.out.println("Welcome to employee wage computation problem");
         final int FULL_TIME_DAILY_HOUR = 8;
         final int PART_TIME_DAILY_HOUR = 4;
+
        List<CompanyEmpWage> companies = new ArrayList<>();
         companies.add(new CompanyEmpWage("Company1", FULL_TIME_DAILY_HOUR, PART_TIME_DAILY_HOUR, 20, 100));
         companies.add(new CompanyEmpWage("Company2", FULL_TIME_DAILY_HOUR, PART_TIME_DAILY_HOUR, 20, 100));
@@ -74,32 +138,3 @@ public class EmployeeWage {
         }
     }
 }
-
-class CompanyEmpWage {
-    private final String companyName;
-    private final int fullTimeDailyHour;
-    private final int partTimeDailyHour;
-    private final int noOfDays;
-    private final int totalHours;
-
-    public CompanyEmpWage(String companyName, int fullTimeDailyHour, int partTimeDailyHour, int noOfDays, int totalHours) {
-        this.companyName = companyName;
-        this.fullTimeDailyHour = fullTimeDailyHour;
-        this.partTimeDailyHour = partTimeDailyHour;
-        this.noOfDays = noOfDays;
-        this.totalHours = totalHours;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public int getFullTimeDailyHour() {
-        return fullTimeDailyHour;
-    }
-
-    public int getPartTimeDailyHour() {
-        return partTimeDailyHour;
-    }
-}
-
